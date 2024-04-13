@@ -56,6 +56,54 @@ func TestCacheStructOfInteger(t *testing.T) {
 }
 
 // ----------------------------------------------------------------------------
+// Float Parameters
+
+func TestCacheDirectFloat(t *testing.T) {
+	numCalls := 0
+	var f = func(i float64) float64 {
+		numCalls += 1
+		return i * 2.0
+	}
+
+	c := cache.NewCache[float64, float64](f)
+
+	// Call the function many times with repeated parameters
+	// Should only result in one call!
+	for i := 0; i < 10; i += 1 {
+		c.CallWithCache(1.0)
+	}
+
+	if numCalls != 1 {
+		t.Fatalf("function should have been called once, but was called %v times", numCalls)
+	}
+}
+
+func TestCacheStructOfFloat(t *testing.T) {
+	type params struct {
+		A float64
+		B float64
+	}
+
+	numCalls := 0
+	var f = func(p params) float64 {
+		numCalls += 1
+		return p.A * p.B
+	}
+
+	c := cache.NewCache[params, float64](f)
+
+	// Call the function many times with repeated parameters
+	// Should only result in one call!
+	for i := 0; i < 10; i += 1 {
+		c.CallWithCache(params{11.0, 17.0})
+	}
+
+	if numCalls != 1 {
+		t.Fatalf("function should have been called once, but was called %v times", numCalls)
+	}
+}
+
+// ----------------------------------------------------------------------------
 // String Parameters
 
 func TestCacheDirectString(t *testing.T) {
