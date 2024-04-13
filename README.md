@@ -13,7 +13,9 @@ See the tests under the `tests` directory for comprehensive examples.
 ```Go
 package main
 
-use "github.com/hmcalister/GenericCaching"
+import (
+    "github.com/hmcalister/GenericCaching"
+) 
 
 func main() {
     type params struct {
@@ -36,6 +38,8 @@ func main() {
 
 	c := cache.NewCache[params, output](f)
 
+    // The result of this call is cached and will be returned 
+    // on future calls with the same parameters without recomputation of f
 	c.CallWithCache(params{
 		IntegerParam: 1,
 		StringParam:  "Caching!",
