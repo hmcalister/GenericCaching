@@ -29,3 +29,23 @@ func NewCache[ParamType any, ReturnType any](f CacheableFunction[ParamType, Retu
 	}
 }
 
+func (c *Cache[ParamType, ReturnType]) CallWithCache(params ParamType) ReturnType {
+	paramsHash := c.hashParams(params)
+
+	// Check if the function has been called with these args
+	c.concurrentMutex.RLock()
+	cachedValue, ok := c.cacheValues[paramsHash]
+	c.concurrentMutex.RUnlock()
+
+	if ok {
+		return cachedValue
+	}
+
+	// We did not hit the cache, so we must compute
+	calculatedValue := c.f(params)
+	c.concurrentMutex.Lock()
+	c.cacheValues[paramsHash] = calculatedValue
+	c.concurrentMutex.Unlock()
+	return calculatedValue
+}
+
