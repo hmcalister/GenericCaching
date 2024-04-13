@@ -80,3 +80,28 @@ func TestCacheDirectString(t *testing.T) {
 	}
 }
 
+func TestCacheStructOfInteger(t *testing.T) {
+	type params struct {
+		A int
+		B int
+	}
+
+	numCalls := 0
+	var f = func(p params) int {
+		numCalls += 1
+		return p.A * p.B
+	}
+
+	c := cache.NewCache[params, int](f)
+
+	// Call the function many times with repeated parameters
+	// Should only result in one call!
+	for i := 0; i < 10; i += 1 {
+		c.CallWithCache(params{11, 17})
+	}
+
+	if numCalls != 1 {
+		t.Fatalf("function should have been called once, but was called %v times", numCalls)
+	}
+}
+
