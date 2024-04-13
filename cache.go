@@ -49,3 +49,13 @@ func (c *Cache[ParamType, ReturnType]) CallWithCache(params ParamType) ReturnTyp
 	return calculatedValue
 }
 
+func (c *Cache[ParamType, ReturnType]) hashParams(params ParamType) uint64 {
+	hashFunc := fnv.New64a()
+	var encodedParams bytes.Buffer
+	enc := gob.NewEncoder(&encodedParams)
+	if err := enc.Encode(params); err != nil {
+		panic(err)
+	}
+	hashFunc.Write(encodedParams.Bytes())
+	return hashFunc.Sum64()
+}
