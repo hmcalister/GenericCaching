@@ -105,6 +105,38 @@ func TestCacheStructOfInteger(t *testing.T) {
 	}
 }
 
+// This test is INCONSISTENT!!! It may sometimes pass and sometimes fail.
+//
+// func TestCacheStructOfMap(t *testing.T) {
+// 	type params struct {
+// 		A map[int]int
+// 	}
+
+// 	numCalls := 0
+// 	var f = func(p params) int {
+// 		numCalls += 1
+// 		return p.A[0]
+// 	}
+
+// 	c := cache.NewCache[params, int](f)
+
+// 	// Call the function many times with repeated parameters
+// 	// Should only result in one call!
+// 	for i := 0; i < 10; i += 1 {
+// 		c.CallWithCache(params{
+// 			map[int]int{
+// 				0: 0,
+// 				1: 1,
+// 				2: 4,
+// 			},
+// 		})
+// 	}
+
+// 	if numCalls != 1 {
+// 		t.Fatalf("function should have been called once, but was called %v times", numCalls)
+// 	}
+// }
+
 func TestCacheDirectInteger(t *testing.T) {
 	numCalls := 0
 	var f = func(i int) int {
