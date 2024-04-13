@@ -82,7 +82,7 @@ func BenchmarkCacheDirectString(b *testing.B) {
 
 func BenchmarkCacheExpensive(b *testing.B) {
 	var f = func(i int) int {
-		time.Sleep(time.Millisecond * 10)
+		time.Sleep(time.Microsecond)
 		return i * 2
 	}
 	c := cache.NewCache[int, int](f)
