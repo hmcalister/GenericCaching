@@ -60,3 +60,23 @@ func TestCacheReturnStruct(t *testing.T) {
 	}
 }
 
+func TestCacheDirectString(t *testing.T) {
+	numCalls := 0
+	var f = func(s string) string {
+		numCalls += 1
+		return s + " cached!"
+	}
+
+	c := cache.NewCache[string, string](f)
+
+	// Call the function many times with repeated parameters
+	// Should only result in one call!
+	for i := 0; i < 10; i += 1 {
+		c.CallWithCache("operation?")
+	}
+
+	if numCalls != 1 {
+		t.Fatalf("function should have been called once, but was called %v times", numCalls)
+	}
+}
+
