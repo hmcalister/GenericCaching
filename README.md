@@ -2,7 +2,9 @@
 
 This package implements a caching for functions with a single input and single output. By using structs for function input and output we can cache any general function using struct hashing.
 
-Beware! Caching a struct with a `map` field may not work as expected, as the `map` type does not have a guaranteed field order and is hence difficult to hash consistently. In general, do not cache on the `map` type and instead make a call into the `map` from the cached function, using the `map` key as the cache parameter. 
+Beware! Caching a struct with a `map` field may not work as expected, as the `map` type does not have a guaranteed field order and is hence difficult to hash consistently. In general, do not cache on the `map` type and instead make a call into the `map` from the cached function, using the `map` key as the cache parameter.
+
+Inspired and expanded from [Skarlso/cache](https://github.com/Skarlso/cache).
 
 ## Example
 
