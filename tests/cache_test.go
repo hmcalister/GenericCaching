@@ -32,3 +32,31 @@ func TestCacheStructOfString(t *testing.T) {
 	}
 }
 
+func TestCacheReturnStruct(t *testing.T) {
+	type returnType struct {
+		A int
+		B int
+	}
+
+	numCalls := 0
+	var f = func(i int) returnType {
+		numCalls += 1
+		return returnType{
+			A: i,
+			B: 10 * i,
+		}
+	}
+
+	c := cache.NewCache[int, returnType](f)
+
+	// Call the function many times with repeated parameters
+	// Should only result in one call!
+	for i := 0; i < 10; i += 1 {
+		c.CallWithCache(1)
+	}
+
+	if numCalls != 1 {
+		t.Fatalf("function should have been called once, but was called %v times", numCalls)
+	}
+}
+
