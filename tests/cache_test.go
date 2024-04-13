@@ -193,3 +193,25 @@ func TestCacheStructInStructOut(t *testing.T) {
 	})
 }
 
+func TestCacheSimulateExpensiveCall(t *testing.T) {
+	sleepDuration := 100 * time.Millisecond
+
+	var f = func(i int) int {
+		time.Sleep(sleepDuration)
+		return i
+	}
+
+	c := cache.NewCache[int, int](f)
+
+	// Call the function many times with repeated parameters
+	// Should only result in one call!
+
+	startTime := time.Now()
+	for i := 0; i < 10; i += 1 {
+		c.CallWithCache(1)
+	}
+
+	if time.Since(startTime) > 2*sleepDuration {
+		t.Fatalf("expensive call appears to have been called multiple times")
+	}
+}
