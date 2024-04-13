@@ -57,5 +57,12 @@ func (c *Cache[ParamType, ReturnType]) hashParams(params ParamType) uint64 {
 		panic(err)
 	}
 	hashFunc.Write(encodedParams.Bytes())
+
+	// hashFunc := fnv.New64a()
+	// pPtr := unsafe.Pointer(&params)
+	// pSize := unsafe.Sizeof(params)
+	// encodedParams := unsafe.Slice((*byte)(pPtr), pSize)
+	// hashFunc.Write(encodedParams)
+
 	return hashFunc.Sum64()
 }
