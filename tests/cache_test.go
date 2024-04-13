@@ -152,6 +152,68 @@ func TestCacheStructOfString(t *testing.T) {
 }
 
 // ----------------------------------------------------------------------------
+// Array Parameters
+
+func TestCacheDirectArray(t *testing.T) {
+	numCalls := 0
+	var f = func(arr []int) int {
+		numCalls += 1
+
+		sum := 0
+		for _, i := range arr {
+			sum += i
+		}
+		return sum
+	}
+
+	c := cache.NewCache[[]int, int](f)
+
+	// Call the function many times with repeated parameters
+	// Should only result in one call!
+	for i := 0; i < 10; i += 1 {
+		c.CallWithCache([]int{1, 2, 3})
+	}
+
+	if numCalls != 1 {
+		t.Fatalf("function should have been called once, but was called %v times", numCalls)
+	}
+}
+
+func TestCacheStructOfArrays(t *testing.T) {
+	type params struct {
+		A []int
+		B []float64
+	}
+
+	numCalls := 0
+	var f = func(p params) float64 {
+		numCalls += 1
+
+		shortestArray := min(len(p.A), len(p.B))
+		sum := 0.0
+		for i := 0; i < shortestArray; i += 1 {
+			sum += float64(p.A[i]) * p.B[i]
+		}
+		return sum
+	}
+
+	c := cache.NewCache[params, float64](f)
+
+	// Call the function many times with repeated parameters
+	// Should only result in one call!
+	for i := 0; i < 10; i += 1 {
+		c.CallWithCache(params{
+			[]int{1, 4, 9, 16},
+			[]float64{1.0, 2.0, 3.0, 4.0},
+		})
+	}
+
+	if numCalls != 1 {
+		t.Fatalf("function should have been called once, but was called %v times", numCalls)
+	}
+}
+
+// ----------------------------------------------------------------------------
 // Struct Parameters and Outputs
 
 func TestCacheReturnStruct(t *testing.T) {
