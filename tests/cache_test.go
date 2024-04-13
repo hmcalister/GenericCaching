@@ -165,3 +165,31 @@ func TestCacheStructOfPointer(t *testing.T) {
 	}
 }
 
+func TestCacheStructInStructOut(t *testing.T) {
+	type params struct {
+		IntegerParam int
+		StringParam  string
+		FloatParam   float64
+	}
+
+	type output struct {
+		StringOutput string
+		FloatOutput  float64
+	}
+
+	var f = func(p params) output {
+		return output{
+			StringOutput: p.StringParam,
+			FloatOutput:  float64(p.IntegerParam) * p.FloatParam,
+		}
+	}
+
+	c := cache.NewCache[params, output](f)
+
+	c.CallWithCache(params{
+		IntegerParam: 1,
+		StringParam:  "Caching!",
+		FloatParam:   2.0,
+	})
+}
+
