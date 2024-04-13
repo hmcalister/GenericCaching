@@ -22,3 +22,10 @@ type Cache[ParamType any, ReturnType any] struct {
 	concurrentMutex sync.RWMutex
 }
 
+func NewCache[ParamType any, ReturnType any](f CacheableFunction[ParamType, ReturnType]) *Cache[ParamType, ReturnType] {
+	return &Cache[ParamType, ReturnType]{
+		f:           f,
+		cacheValues: make(map[uint64]ReturnType),
+	}
+}
+
