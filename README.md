@@ -57,6 +57,7 @@ func main() {
 - Currently, the caching relies on a consistent hashing of the function inputs. This is difficult for structs in general, as discussed above for `map` types. It may be nice to add some consistent caching method for any struct, but this problem pushes up against the language specification.
 
 - The current caching algorithm requires encoding and hashing the parameter type. For generality, we encode the parameters into a string using `encoding/gob` and hash the resulting string using `hash/fnv`. It would be interesting to benchmark just how long this process takes in comparison to just recomputing the function. I imagine for some functions, such a `f(int) -> int` caching would be a detriment.
+	- Update: Implementing some benchmarks have shown our assumption is correct. Only function calls longer than about one hundred nanoseconds are worth caching.
 
 - In future, it would be nice to add cache types for specifically numerical types only, such that the encoding could be numerical rather than a string, which may be faster.
 
