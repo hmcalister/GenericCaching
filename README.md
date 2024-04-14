@@ -62,3 +62,5 @@ func main() {
 - In future, it would be nice to add cache types for specifically numerical types only, such that the encoding could be numerical rather than a string, which may be faster.
 
 - In future, adding the option for cache durations would be interesting as well, such that cached values are also associated with a timestamp that allow for recomputation after some time.
+
+- In future, it may be nice to have some way to boot items from the cache to avoid memory exploding. However, this is a very difficult task as deciding on what to boot is non-trivial.
