@@ -1,5 +1,7 @@
 # Generic Caching
 
+> The two hardest things in computer science: naming things, cache invalidation, and off by one errors
+
 This package implements a caching for functions with a single input and single output. By using structs for function input and output we can cache any general function using struct hashing.
 
 Benchmarks show it is only worth caching for function calls that are relatively expensive. Below function calls taking about 100 nanoseconds simply recomputing the function is less expensive than caching.
